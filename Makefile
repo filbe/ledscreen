@@ -43,16 +43,29 @@ EXT = . drivers
 # include path
 INCLUDE := $(foreach dir, $(EXT), -I$(dir))
 # c flags
-CFLAGS    = -std=gnu11 -Wall -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(INCLUDE)
+
 # any aditional flags for c++
 CPPFLAGS =
 
-# executables
-AVRDUDE = avrdude -c $(PRG) -p $(MCU)
-OBJCOPY = avr-objcopy
-OBJDUMP = avr-objdump
-SIZE    = avr-size --format=avr --mcu=$(MCU)
-CC      = avr-gcc
+
+ifeq ($(target),rpi)
+	# executables
+	AVRDUDE = 
+	OBJCOPY = objcopy
+	OBJDUMP = objdump
+	SIZE    = size
+	CC      = gcc
+	CFLAGS    = -DRPI=1 -std=gnu11 -Wall -Os -lm $(INCLUDE)
+else
+	# executables
+	AVRDUDE = avrdude -c $(PRG) -p $(MCU)
+	OBJCOPY = avr-objcopy
+	OBJDUMP = avr-objdump
+	SIZE    = avr-size --format=avr --mcu=$(MCU)
+	CC      = avr-gcc
+	CFLAGS    = -DATMEGA328P=1 -std=gnu11 -Wall -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(INCLUDE)
+endif
+
 
 # generate list of objects
 CFILES    = $(filter %.c, $(SRC))
@@ -102,7 +115,7 @@ clean:
 
 # elf file
 $(PRJ).elf: $(OBJ)
-	$(CC) $(CFLAGS) -o $(PRJ).elf $(OBJ)
+	$(CC) $(CFLAGS) -o $(PRJ).elf $(OBJ) -lm
 
 # hex file
 $(PRJ).hex: $(PRJ).elf

@@ -1,6 +1,6 @@
-#ifdef ATMEGA328P
+#ifdef RPI
 
-#include "atmega328p.h"
+#include "rpi.h"
 
 void __LCD_DRIVER_WRITE_RESET_AFTER() {
 	_delay_us(51);

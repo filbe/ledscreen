@@ -1,9 +1,6 @@
 
 
 
-#define ATMEGA328P
-
-
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
