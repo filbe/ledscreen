@@ -1,6 +1,8 @@
 #ifndef __LCD_DRIVER_ATMEGA328P_H
 #define __LCD_DRIVER_ATMEGA328P_H
 
+#ifdef ATMEGA328P
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include <avr/pgmspace.h>
@@ -50,4 +52,5 @@ inline void __LCD_DRIVER_WRITE_RESET() {
 }
 void __LCD_DRIVER_WRITE_RESET_AFTER();
 
+#endif /* ATMEGA328P */
 #endif /* __LCD_DRIVER_ATMEGA328P_H */
