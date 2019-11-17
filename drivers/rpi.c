@@ -8,6 +8,14 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
+void delayMicrosecondsHard (unsigned int howLong)
+{
+  *(timer + TIMER_LOAD)    = howLong ;
+  *(timer + TIMER_IRQ_CLR) = 0 ;
+
+  while (*timerIrqRaw == 0)
+    ;
+}  
 void delayNanoseconds(unsigned int howLong)
 {
   struct timespec sleeper, dummy ;
