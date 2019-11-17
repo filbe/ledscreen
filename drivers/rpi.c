@@ -5,6 +5,7 @@
 
 #include <time.h>
 #include <unistd.h>
+#include <wiringPi.h>
 #include "rpi.h"
 
 void __LCD_DRIVER_INIT() {
