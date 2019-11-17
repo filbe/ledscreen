@@ -11,13 +11,30 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
-void delayNanoseconds(unsigned int howLong) {
-	struct timespec ts;
-	ts.tv_sec = 0;
-	ts.tv_nsec = howLong;
 
-	nanosleep(&ts, &ts);
-	
+int msleep(long msec)
+{
+    struct timespec ts;
+    int res;
+
+    if (msec < 0)
+    {
+        errno = EINVAL;
+        return -1;
+    }
+
+    ts.tv_sec = msec / 1000;
+    ts.tv_nsec = (msec % 1000) * 1000000;
+
+    do {
+        res = nanosleep(&ts, &ts);
+    } while (res && errno == EINTR);
+
+    return res;
+}
+
+void delayNanoseconds(unsigned int howLong) {
+	msleep(howLong);
 }
 
 void __LCD_DRIVER_INIT() {
