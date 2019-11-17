@@ -11,7 +11,7 @@
 #include "ledscreen.h"
 
 #include "drivers/atmega328p.h"
-//#include "drivers/rpi.h"
+#include "drivers/rpi.h"
 
 
 
