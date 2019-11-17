@@ -13,6 +13,7 @@
 
 void delayNanoseconds(unsigned int howLong) {
 	struct timespec ts;
+	ts.tv_sec = 0;
 	ts.tv_nsec = howLong;
 
 	nanosleep(&ts, &ts);
