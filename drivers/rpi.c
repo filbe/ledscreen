@@ -12,7 +12,9 @@
 #include "rpi.h"
 
 void delayNanoseconds(unsigned int howLong) {
-
+	for (int i=0;i<howLong;i++) {
+		__asm("nop");
+	}
 }
 
 void __LCD_DRIVER_INIT() {
