@@ -11,12 +11,12 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
-void delayMicrosecondsHard(unsigned int timeout) {
+void delayNanosecondsHard(unsigned int timeout) {
 	struct timeval tNow, tLong, tEnd;
 
 	gettimeofday(&tNow, NULL);
-	tLong.tv_sec = timeout / 1000000;
-	tLong.tv_usec = timeout % 1000000;
+	tLong.tv_sec = 0;
+	tLong.tv_usec = timeout / 1000; 
 	timeradd(&tNow, &tLong, &tEnd);
 
 	while(timercmp(&tNow, &tEnd, <))
@@ -25,8 +25,8 @@ void delayMicrosecondsHard(unsigned int timeout) {
 
 void delayNanoseconds(unsigned int timeout) {
 	struct timespec sleeper;
-	unsigned int uSecs = timeout % 1000000;
-	unsigned int wSecs = timeout / 1000000;
+	unsigned int uSecs = timeout;
+	unsigned int wSecs = 0;
 
 	if(timeout == 0)
 		return;
