@@ -1,100 +1,78 @@
+/* Ledscreen driver library for microcontrollers
+ * Author: Ville-Pekka Lahti (C) 2019
+ * vp@wdr.fi
+ * +358504686300
+ * This project is tested with AtMega328P @ 16MHz
+ */
+
 #include <string.h>
-#include <util/delay.h>
-#include <avr/io.h>
-#include <avr/pgmspace.h>
 #include <stdlib.h>
-#include "twi.h"
+#include <stdint.h>
 #include "ledscreen.h"
 
-#define TR 		6
+#include "drivers/atmega328p.h"
 
 
-float x_offset = 0;
 
-float y_offset = 0;
-
-float z_offset = 0;
-
-/*
-float x_cam_offset = 0;
-
-float y_cam_offset = 0;
-
-float z_cam_offset = 0;
-*/
-
-const uint8_t image_data[] PROGMEM = {
-	255,255,255,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 255,255,255,255 , 1,1,1,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 1,1,1,255 , 0,0,0,255 , 1,1,1,255 , 255,255,255,255 , 75,205,9,255 , 75,205,9,255 , 255,255,255,255 , 1,1,1,255 , 0,0,0,255 , 1,1,1,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 0,1,0,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 69,193,8,255 , 69,193,8,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 1,1,1,255 , 0,1,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 1,1,1,255 , 1,1,1,255 , 81,220,12,255 , 255,255,255,255 , 255,255,255,255 , 57,189,0,255 , 82,197,24,255 , 82,197,24,255 , 57,189,0,255 , 255,255,255,255 , 255,255,255,255 , 81,220,12,255 , 1,1,1,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 58,189,0,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 70,193,8,255 , 58,189,0,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 1,1,1,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 70,193,8,255 , 57,189,0,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 57,189,0,255 , 70,193,8,255 , 255,255,255,255 , 255,255,255,255 , 1,1,1,255 , 1,1,1,255 , 0,0,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 59,190,0,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 59,190,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 0,0,0,255 , 0,0,0,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 59,190,0,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 59,190,0,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 0,0,0,255 , 0,0,0,255 , 255,255,255,255 , 255,255,255,255 , 57,189,0,255 , 70,193,8,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 255,255,255,255 , 254,255,254,255 , 255,255,255,255 , 70,193,8,255 , 57,189,0,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 0,0,0,255 , 75,205,9,255 , 69,192,8,255 , 87,210,25,255 , 87,210,25,255 , 62,201,0,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 62,201,0,255 , 87,210,25,255 , 87,210,25,255 , 69,192,8,255 , 75,205,9,255 , 0,0,0,255 , 0,0,0,255 , 91,222,26,255 , 92,223,26,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 92,223,26,255 , 91,222,26,255 , 0,0,0,255 , 0,1,0,255 , 1,1,1,255 , 0,0,0,255 , 0,0,0,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 0,0,0,255 , 1,1,1,255 , 0,1,0,255 , 255,255,255,255 , 0,0,0,255 , 1,1,1,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 1,1,1,255 , 0,0,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 254,254,254,255 , 254,254,254,255 , 255,255,255,255 , 254,254,254,255 , 254,254,254,255 , 255,255,255,255 , 254,254,254,255 , 254,254,254,255 , 255,255,255,255 , 0,0,0,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 255,255,255,255 , 1,1,1,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 1,1,1,255 , 1,1,1,255 , 255,255,255,255 , 255,255,255,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255 , 1,1,1,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 0,0,0,255 , 1,1,1,255 , 255,255,255,255 , 254,254,254,255 , 255,255,255,255
-};
-
-
-void LCD_write_zero() {
-	PORTD = 1;
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
-	PORTD = 0;
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+void LCD_init() {
+	__LCD_DRIVER_INIT();
+}
+void _LCD_write_zero() {
+	__LCD_DRIVER_WRITE_ZERO_SIG_UP();
+	__LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER();
+	__LCD_DRIVER_WRITE_ZERO_SIG_DOWN();
+	__LCD_DRIVER_WRITE_ZERO_SIG_DOWN_AFTER();
 }
 
-void LCD_write_one() {
-	PORTD = 1;
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
-	PORTD = 0;
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+void _LCD_write_one() {
+	__LCD_DRIVER_WRITE_ONE_SIG_UP();
+	__LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER();
+	__LCD_DRIVER_WRITE_ONE_SIG_DOWN();
+	__LCD_DRIVER_WRITE_ONE_SIG_DOWN_AFTER();
 }
 
-void LCD_write_reset() {
-	PORTD = 0;
-	_delay_us(51);
+void _LCD_write_reset() {
+	__LCD_DRIVER_WRITE_RESET();
+	__LCD_DRIVER_WRITE_RESET_AFTER();
 }
 
-void LCD_wait_reset() {
-	DDRD = 0;
-	for (uint8_t i=0;i<80;i++) {
-		__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
-	}
-	while(PIND != 0) {
-
-	}
-}
-
-void LCD_send_component(uint8_t val) {
-	val = val >> 2;
+void _LCD_send_component(uint8_t val) {
+	val = val / 8;
 	for (uint8_t i=0;i<8;i++) {
 		if (val >> (7-i)) {
-			LCD_write_one();
+			_LCD_write_one();
 		} else {
-			LCD_write_zero();
+			_LCD_write_zero();
 		}
 	}
 }
 
-void LCD_send_color(uint8_t r, uint8_t g, uint8_t b) {
-	LCD_send_component(g);
-	LCD_send_component(r);
-	LCD_send_component(b);
+void _LCD_send_color(uint8_t r, uint8_t g, uint8_t b) {
+	_LCD_send_component(g);
+	_LCD_send_component(r);
+	_LCD_send_component(b);
 }
 
-volatile uint8_t screen[256][3];
-
 void LCD_drawpixel(uint8_t _x, uint8_t _y, uint8_t r, uint8_t g, uint8_t b) {
-	uint8_t x=(_x + (int)(x_offset)) % 32;
-	uint8_t y=(_y + (int)(y_offset)) % 8;
+	uint8_t x=(_x + (int)(x_offset)) % SCREEN_W;
+	uint8_t y=(_y + (int)(y_offset)) % SCREEN_H;
 
-	if (y >= 8) {
-		y-=8;
-		x+=32;
-	}
+	#ifdef SECOND_PANEL_ON_BOTTOM
+		if (y >= PANEL_H) {
+			y-=PANEL_H;
+			x+=PANEL_W;
+		}
+	#endif /* SECOND_SCREEN_ON_BOTTOM */
 
+	#ifdef PANEL_LAYOUT_ZIGZAG
+		if (x % 2) {
+			y = 7-y;
+		}
+	#endif
 
-	if (x % 2) {
-		y = 7-y;
-	}
-
-	
-
-	screen[x*8+y][0] = r;
-	screen[x*8+y][1] = g;
-	screen[x*8+y][2] = b;
+	screen[x*PANEL_H+y][0] = r;
+	screen[x*PANEL_H+y][1] = g;
+	screen[x*PANEL_H+y][2] = b;
 }
 
 void LCD_draw_color_image(const uint8_t data[], uint16_t w, uint16_t h) {
@@ -103,23 +81,29 @@ void LCD_draw_color_image(const uint8_t data[], uint16_t w, uint16_t h) {
 			LCD_drawpixel(
 				x,
 				y,
+				#ifdef AVR_PGMMEM
 				pgm_read_byte(&data[(uint16_t)(y*w*3+x*3+0)]),
 				pgm_read_byte(&data[(uint16_t)(y*w*3+x*3+1)]),
 				pgm_read_byte(&data[(uint16_t)(y*w*3+x*3+2)])
+				#else
+				data[(uint16_t)(y*w*3+x*3+0)],
+				data[(uint16_t)(y*w*3+x*3+1)],
+				data[(uint16_t)(y*w*3+x*3+2)]
+				#endif
 			);
 		}
 	}
 }
 
 void LCD_drawscreen() {
-	for (uint16_t i=0;i<256;i++) {
-		LCD_send_color(screen[i][0],screen[i][1],screen[i][2]);
+	for (uint16_t i=0;i<SCREEN_SIZE;i++) {
+		_LCD_send_color(screen[i][0],screen[i][1],screen[i][2]);
 	}
-	LCD_write_reset();
+	_LCD_write_reset();
 }
 
 void LCD_clearscreen() {
-	for (uint16_t i=0;i<256;i++) {
+	for (uint16_t i=0;i<SCREEN_SIZE;i++) {
 		screen[i][0] = 0;
 		screen[i][1] = 0;
 		screen[i][2] = 0;
@@ -127,7 +111,7 @@ void LCD_clearscreen() {
 }
 
 
-void drawLine(int X0, int Y0, int X1, int Y1,uint8_t r, uint8_t g, uint8_t b)
+void LCD_drawline(int X0, int Y0, int X1, int Y1,uint8_t r, uint8_t g, uint8_t b)
 {
 	// calculate dx , dy
 	float dx = X1 - X0;
@@ -153,115 +137,22 @@ void drawLine(int X0, int Y0, int X1, int Y1,uint8_t r, uint8_t g, uint8_t b)
 	}
 }
 
-float a = 1;
-
-
-/*
-int8_t voxel_lines[] = {
-
-	3,3,4,	6,3,7,
-	6,3,4,	6,6,7,
-	6,6,4,	3,6,7,
-	3,6,4,	3,3,7,
-
-	3,3,4,	6,3,6,
-	6,3,4,	6,6,6,
-	6,6,4,	3,6,6,
-	3,6,4,	3,3,6,
-
-	3,3,4,	6,3,5,
-	6,3,4,	6,6,5,
-	6,6,4,	3,6,5,
-	3,6,4,	3,3,5,
-
-	3,3,4,	6,3,4,
-	6,3,4,	6,6,4,
-	6,6,4,	3,6,4,
-	3,6,4,	3,3,4,
-
-	3,3,4,	6,3,3,
-	6,3,4,	6,6,3,
-	6,6,4,	3,6,3,
-	3,6,4,	3,3,3,
-
-	3,3,2,	6,3,2,
-	6,3,2,	6,6,2,
-	6,6,2,	3,6,2,
-	3,6,2,	3,3,2
-};
-*/
-
-
 int c_3d_to_2d_x(int x, int y, float z) {
-	return 2+6*((x) / (float)((float)z));
+	return ((x) / (float)((float)z));
 }
 
 int c_3d_to_2d_y(int x, int y, float z) {
-	return 6*((y) / (float)((float)z));
+	return ((y) / (float)((float)z));
 }
 
 void LCD_draw_voxel_lineset(int8_t lineset[], uint8_t len, uint8_t r, uint8_t g, uint8_t b) {
-
 	for (uint8_t i=0;i<len;i++) {
 		int8_t x1 = c_3d_to_2d_x(lineset[i*6+0],lineset[i*6+1],lineset[i*6+2]);
 		int8_t y1 = c_3d_to_2d_y(lineset[i*6+0],lineset[i*6+1],lineset[i*6+2]);
 		int8_t x2 = c_3d_to_2d_x(lineset[i*6+3],lineset[i*6+4],lineset[i*6+5]);
 		int8_t y2 = c_3d_to_2d_y(lineset[i*6+3],lineset[i*6+4],lineset[i*6+5]);
-		drawLine(x1,y1,x2,y2,r,g,b);
+		LCD_drawline(x1,y1,x2,y2,r,g,b);
 	}
-	
 }
 
 
-int main() {
-
-	DDRD = 255;
-
-	x_offset = -1;
-	y_offset = 0;
-	z_offset = 0;
-
-	
-	uint8_t frame = 0;
-	while(1) {
-		frame++;
-		LCD_clearscreen();
-
-
-		
-			for (uint8_t line = 0; line < 10;line++) {
-				uint8_t x1 = 16-line;
-				uint8_t y1 = 8 - line;
-				uint8_t x2 = 16 + line;
-				uint8_t y2 = 8 + line;
-				uint8_t r = sin(1.4*a+line*0.4)*127+127;
-				uint8_t g = cos(1.7*a-line*0.4)*127+127;
-				uint8_t b = sin(0.83*a+line*0.4)*127+127;
-
-				drawLine(x1,y1,x2,y1,r,g,b);
-				drawLine(x2,y2,x2,y1,r,g,b);
-				drawLine(x2,y2,x1,y2,r,g,b);
-				drawLine(x1,y2,x1,y1,r,g,b);
-
-
-				drawLine(x1+16,y1,x2+16,y1,r,g,b);
-				drawLine(x2+16,y2,x2+16,y1,r,g,b);
-				drawLine(x2+16,y2,x1+16,y2,r,g,b);
-				drawLine(x1+16,y2,x1+16,y1,r,g,b);
-			}
-
-
-
-
-		LCD_drawscreen();
-
-		x_offset++;
-		y_offset++;
-
-		a+=0.2;
-	}
-	
-
-
-	return 0;
-}

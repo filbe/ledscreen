@@ -30,10 +30,10 @@ LFU = 0xef
 HFU = 0xd9
 EFU = 0xfd
 # program source files (not including external libraries)
-SRC = 
+SRC =
 # where to look for external libraries (consisting of .c/.cpp files and .h files)
 # e.g. EXT = ../../EyeToSee ../../YouSART
-EXT = .
+EXT = . drivers
 
 
 #################################################################################################
@@ -43,7 +43,7 @@ EXT = .
 # include path
 INCLUDE := $(foreach dir, $(EXT), -I$(dir))
 # c flags
-CFLAGS    = -std=c99 -Wall -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(INCLUDE)
+CFLAGS    = -std=gnu11 -Wall -Os -DF_CPU=$(F_CPU) -mmcu=$(MCU) $(INCLUDE)
 # any aditional flags for c++
 CPPFLAGS =
 
