@@ -4,7 +4,7 @@
 //#ifdef RPI
 #include <wiringPi.h>
 
-
+void delayNanoseconds(unsigned int howLong);
 void __LCD_DRIVER_INIT();
 void __LCD_DRIVER_WRITE_ZERO_SIG_UP();
 void __LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER();
