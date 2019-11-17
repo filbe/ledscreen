@@ -8,28 +8,32 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
-void delayMicrosecondsHard (unsigned int howLong)
-{
-  *(timer + TIMER_LOAD)    = howLong ;
-  *(timer + TIMER_IRQ_CLR) = 0 ;
+void delayMicrosecondsHard(unsigned int timeout) {
+	struct timeval tNow, tLong, tEnd;
 
-  while (*timerIrqRaw == 0)
-    ;
-}  
-void delayNanoseconds(unsigned int howLong)
-{
-  struct timespec sleeper, dummy ;
-  
-  /**/ if (howLong ==   0)
-    return ;
-  else if (howLong  < 100)
-    delayMicrosecondsHard (howLong) ;
-  else
-  {
-    sleeper.tv_sec  = 0 ;
-    sleeper.tv_nsec = (long)(howLong) ;
-    nanosleep (&sleeper, &dummy) ;
-  } 
+	gettimeofday(&tNow, NULL);
+	tLong.tv_sec = timeout / 1000000;
+	tLong.tv_usec = timeout % 1000000;
+	timeradd(&tNow, &tLong, &tEnd);
+
+	while(timercmp(&tNow, &tEnd, <))
+		gettimeofday(&tNow, NULL);
+}
+
+void delayNanoseconds(unsigned int timeout) {
+	struct timespec sleeper;
+	unsigned int uSecs = timeout % 1000000;
+	unsigned int wSecs = timeout / 1000000;
+
+	if(timeout == 0)
+		return;
+	else if(timeout < 100)
+		delayMicrosecondsHard(timeout);
+	else {
+		sleeper.tv_sec = wSecs;
+		sleeper.tv_nsec = (long)(uSecs);
+		nanosleep(&sleeper, NULL);
+	}
 }
 
 void __LCD_DRIVER_INIT() {
