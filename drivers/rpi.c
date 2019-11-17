@@ -11,8 +11,8 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
-void delayNanoseconds() {
-	
+void delayNanoseconds(unsigned int howLong) {
+
 }
 
 void __LCD_DRIVER_INIT() {
