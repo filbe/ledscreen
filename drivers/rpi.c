@@ -12,8 +12,8 @@
 #include "rpi.h"
 
 void delayNanoseconds(unsigned int howLong) {
-	for (int i=0;i<(howLong / 6);i++) {
-		__asm("nop");
+	for (int i=0;i<(howLong / 120);i++) {
+		nanosleep(100);
 	}
 }
 
