@@ -4,7 +4,7 @@
 #include "rpi.h"
 
 void __LCD_DRIVER_WRITE_RESET_AFTER() {
-	nanosleep(51000);
+	micros(51);
 }
 
 #endif
