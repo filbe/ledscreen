@@ -11,32 +11,8 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
-void delayNanosecondsHard(unsigned int timeout) {
-	struct timeval tNow, tLong, tEnd;
-
-	gettimeofday(&tNow, NULL);
-	tLong.tv_sec = 0;
-	tLong.tv_usec = timeout / 1000; 
-	timeradd(&tNow, &tLong, &tEnd);
-
-	while(timercmp(&tNow, &tEnd, <))
-		gettimeofday(&tNow, NULL);
-}
-
-void delayNanoseconds(unsigned int timeout) {
-	struct timespec sleeper;
-	unsigned int uSecs = timeout;
-	unsigned int wSecs = 0;
-
-	if(timeout == 0)
-		return;
-	else if(timeout < 100)
-		delayNanosecondsHard(timeout);
-	else {
-		sleeper.tv_sec = wSecs;
-		sleeper.tv_nsec = (long)(uSecs);
-		nanosleep(&sleeper, NULL);
-	}
+void delayNanoseconds() {
+	
 }
 
 void __LCD_DRIVER_INIT() {
