@@ -55,7 +55,7 @@ ifeq ($(target),rpi)
 	OBJDUMP = objdump
 	SIZE    = size
 	CC      = gcc
-	CFLAGS    = -DRPI=1 -std=gnu11 -Wall -Os -lm $(INCLUDE)
+	CFLAGS    = -DRPI=1 -std=gnu11 -Wall -Os -lm -lwiringPi $(INCLUDE)
 else
 	# executables
 	AVRDUDE = avrdude -c $(PRG) -p $(MCU)
