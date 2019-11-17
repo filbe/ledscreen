@@ -31,7 +31,7 @@ void delayNanoseconds(unsigned int timeout) {
 	if(timeout == 0)
 		return;
 	else if(timeout < 100)
-		delayMicrosecondsHard(timeout);
+		delayNanosecondsHard(timeout);
 	else {
 		sleeper.tv_sec = wSecs;
 		sleeper.tv_nsec = (long)(uSecs);
