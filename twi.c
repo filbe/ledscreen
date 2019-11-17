@@ -13,6 +13,9 @@
   License along with this library; if not, write to the Free Software
   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+#ifdef ATMEGA328P
+
 #include <math.h>
 #include <stdlib.h>
 #include <inttypes.h>
@@ -421,3 +424,5 @@ SIGNAL(TWI_vect)
       break;
   }
 }
+
+#endif
