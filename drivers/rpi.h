@@ -1,7 +1,7 @@
 #ifndef __LCD_DRIVER_RPI_H
 #define __LCD_DRIVER_RPI_H
 
-
+#ifdef RPI
 #include <wiringPi.h>
 
 
@@ -46,4 +46,5 @@ inline void __LCD_DRIVER_WRITE_RESET() {
 }
 void __LCD_DRIVER_WRITE_RESET_AFTER();
 
+#endif
 #endif /* __LCD_DRIVER_RPI_H */
