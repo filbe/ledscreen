@@ -34,7 +34,7 @@ inline void __LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER() {
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
-	LCD_OUTPUT_PORT = 0;
+	digitalWrite(0, 0);
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN_AFTER() {
