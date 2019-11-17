@@ -8,6 +8,22 @@
 #include <wiringPi.h>
 #include "rpi.h"
 
+void delayNanoseconds(unsigned int howLong)
+{
+  struct timespec sleeper, dummy ;
+  
+  /**/ if (howLong ==   0)
+    return ;
+  else if (howLong  < 100)
+    delayMicrosecondsHard (howLong) ;
+  else
+  {
+    sleeper.tv_sec  = 0 ;
+    sleeper.tv_nsec = (long)(howLong) ;
+    nanosleep (&sleeper, &dummy) ;
+  } 
+}
+
 void __LCD_DRIVER_INIT() {
 	wiringPiSetup();
 	pinMode(0, OUTPUT);
@@ -17,7 +33,7 @@ void __LCD_DRIVER_WRITE_ZERO_SIG_UP() {
 }
 
 void __LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER() {
-	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	delayNanoseconds(300);
 }
 
 void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
@@ -25,7 +41,7 @@ void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
 }
 
 void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN_AFTER() {
-	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	delayNanoseconds(750);
 }
 
 void __LCD_DRIVER_WRITE_ONE_SIG_UP() {
@@ -33,7 +49,7 @@ void __LCD_DRIVER_WRITE_ONE_SIG_UP() {
 }
 
 void __LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER() {
-	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	delayNanoseconds(700);
 }
 
 void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
@@ -41,7 +57,7 @@ void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
 }
 
 void __LCD_DRIVER_WRITE_ONE_SIG_DOWN_AFTER() {
-	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	delayNanoseconds(350);
 }
 
 void __LCD_DRIVER_WRITE_RESET() {
