@@ -12,7 +12,7 @@
 #include "rpi.h"
 
 void delayNanoseconds(unsigned int howLong) {
-	for (int i=0;i<(howLong >> 4);i++) {
+	for (int i=0;i<(howLong >> 3);i++) {
 		__asm("nop");
 	}
 }
