@@ -1,9 +1,10 @@
 #ifdef RPI
 
+#include <time.h>
 #include "rpi.h"
 
 void __LCD_DRIVER_WRITE_RESET_AFTER() {
-	_delay_us(51);
+	nanosleep(51000);
 }
 
 #endif
