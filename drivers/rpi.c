@@ -12,9 +12,11 @@
 #include "rpi.h"
 
 void delayNanoseconds(unsigned int howLong) {
-	for (int i=0;i<(howLong / 120);i++) {
-		nanosleep(100);
-	}
+	struct timespec ts;
+	ts.tv_nsec = howLong;
+
+	nanosleep(&ts, &ts);
+	
 }
 
 void __LCD_DRIVER_INIT() {
