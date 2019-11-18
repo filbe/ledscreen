@@ -2,7 +2,7 @@
  * Author: Ville-Pekka Lahti (C) 2019
  * vp@wdr.fi
  * +358504686300
- * This project is tested with AtMega328P @ 16MHz
+ * This project is tested with AtMega328P @ 20MHz
  */
 
 #include <string.h>
@@ -119,9 +119,11 @@ void LCD_drawline(int8_t X0, int8_t Y0, int8_t X1, int8_t Y1,uint8_t r, uint8_t 
 			Y0 = Y1;
 			Y1 = t;
 		}
-		for (int i=Y0;i<=Y1; i++) {
-			LCD_drawpixel(X0,i,r,g,b);
+		while(Y1 > Y0) {
+			LCD_drawpixel(X0,Y1,r,g,b);
+			Y1--;
 		}
+		LCD_drawpixel(X0,Y1,r,g,b);
 		return;
 	} else if (Y0 == Y1) {
 		if (X0 > X1) {
@@ -129,9 +131,11 @@ void LCD_drawline(int8_t X0, int8_t Y0, int8_t X1, int8_t Y1,uint8_t r, uint8_t 
 			X0 = X1;
 			X1 = t;
 		}
-		for (int i=X0;i<=X1; i++) {
-			LCD_drawpixel(i,Y0,r,g,b);
+		while(X1 > X0) {
+			LCD_drawpixel(X1,Y0,r,g,b);
+			X1--;
 		}
+		LCD_drawpixel(X1,Y0,r,g,b);
 		return;
 	} else {
 		// calculate dx , dy

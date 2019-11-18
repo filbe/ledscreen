@@ -31,16 +31,14 @@ int main() {
 		frame++;
 		LCD_clearscreen();
 
-
-		
 		for (uint8_t line = 0; line < 10;line++) {
 			uint8_t x1 = 16-line;
 			uint8_t y1 = 8 - line;
 			uint8_t x2 = 16 + line;
 			uint8_t y2 = 8 + line;
-			uint8_t r = sin(1.4*a+line*0.4)*127+127;
-			uint8_t g = cos(1.7*a-line*0.4)*127+127;
-			uint8_t b = sin(0.83*a+line*0.4)*127+127;
+			uint8_t r = sin(1.4*a+line*0.4)*128.0+127;
+			uint8_t g = cos(1.7*a-line*0.4)*128.0+127;
+			uint8_t b = sin(0.83*a+line*0.4)*128.0+127;
 
 			LCD_drawline(x1,y1,x2,y1,r,g,b);
 			LCD_drawline(x2,y2,x2,y1,r,g,b);

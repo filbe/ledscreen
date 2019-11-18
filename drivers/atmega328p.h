@@ -28,7 +28,9 @@ inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
 }
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	// we dont need this since other processing will spend some time, so this is a great place to squeeze all the juices out of the MCU ;)
+	
+	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_UP() {
