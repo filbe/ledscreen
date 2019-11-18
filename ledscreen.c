@@ -17,27 +17,27 @@
 void LCD_init() {
 	__LCD_DRIVER_INIT();
 }
-void _LCD_write_zero() {
+inline void _LCD_write_zero() {
 	__LCD_DRIVER_WRITE_ZERO_SIG_UP();
 	__LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER();
 	__LCD_DRIVER_WRITE_ZERO_SIG_DOWN();
 	__LCD_DRIVER_WRITE_ZERO_SIG_DOWN_AFTER();
 }
 
-void _LCD_write_one() {
+inline void _LCD_write_one() {
 	__LCD_DRIVER_WRITE_ONE_SIG_UP();
 	__LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER();
 	__LCD_DRIVER_WRITE_ONE_SIG_DOWN();
 	__LCD_DRIVER_WRITE_ONE_SIG_DOWN_AFTER();
 }
 
-void _LCD_write_reset() {
+inline void _LCD_write_reset() {
 	__LCD_DRIVER_WRITE_RESET();
 	__LCD_DRIVER_WRITE_RESET_AFTER();
 }
 
 inline void _LCD_send_component(uint8_t val) {
-	val = val >> 3;
+	//val = val >> 3;
 	for (uint8_t i=0;i<8;i++) {
 		if ((val >> (7-i)) & 1) {
 			_LCD_write_one();
@@ -47,7 +47,7 @@ inline void _LCD_send_component(uint8_t val) {
 	}
 }
 
-void _LCD_send_color(uint8_t r, uint8_t g, uint8_t b) {
+inline void _LCD_send_color(uint8_t r, uint8_t g, uint8_t b) {
 	_LCD_send_component(g);
 	_LCD_send_component(r);
 	_LCD_send_component(b);
@@ -103,10 +103,20 @@ void LCD_drawscreen() {
 }
 
 void LCD_clearscreen() {
-	for (uint16_t i=0;i<SCREEN_SIZE;i++) {
-		screen[i][0] = 0;
-		screen[i][1] = 0;
-		screen[i][2] = 0;
+	memset(&screen, 0, SCREEN_SIZE);
+}
+
+void LCD_clearscreen_fade() {
+	for (int i=0;i<SCREEN_SIZE;i++) {
+		if (screen[i][0]) {
+			screen[i][0] /= 1.25;
+		}
+		if (screen[i][1]) {
+			screen[i][1] /= 1.25;
+		}
+		if (screen[i][2]) {
+			screen[i][2] /= 1.25;
+		}
 	}
 }
 
@@ -139,24 +149,24 @@ void LCD_drawline(int8_t X0, int8_t Y0, int8_t X1, int8_t Y1,uint8_t r, uint8_t 
 		return;
 	} else {
 		// calculate dx , dy
-		int16_t dx = X1 - X0;
-		int16_t dy = Y1 - Y0;
+		float dx = X1 - X0;
+		float dy = Y1 - Y0;
 
 		// Depending upon absolute value of dx & dy
 		// choose number of steps to put pixel as
 		// steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy)
-		int16_t steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
+		float steps = abs(dx) > abs(dy) ? abs(dx) : abs(dy);
 
 		// calculate increment in x & y for each steps
-		int16_t Xinc = 256*dx / steps;
-		int16_t Yinc = 256*dy / steps;
+		float Xinc = dx / steps;
+		float Yinc = dy / steps;
 
 		// Put pixel for each step
-		int16_t X = X0;
-		int16_t Y = Y0;
+		float X = X0;
+		float Y = Y0;
 		for (int i = 0; i <= steps; i++)
 		{
-		    LCD_drawpixel(X >> 8,Y >> 8,r,g,b);
+		    LCD_drawpixel(X,Y,r,g,b);
 		    X += Xinc;
 		    Y += Yinc;
 		}

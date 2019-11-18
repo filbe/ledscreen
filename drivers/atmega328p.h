@@ -20,7 +20,7 @@ inline void __LCD_DRIVER_WRITE_ZERO_SIG_UP() {
 }
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
@@ -29,7 +29,6 @@ inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN_AFTER() {
 	// we dont need this since other processing will spend some time, so this is a great place to squeeze all the juices out of the MCU ;)
-	
 	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
@@ -38,7 +37,7 @@ inline void __LCD_DRIVER_WRITE_ONE_SIG_UP() {
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
@@ -46,13 +45,17 @@ inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_RESET() {
 	LCD_OUTPUT_PORT &= ~(1);
 }
-void __LCD_DRIVER_WRITE_RESET_AFTER();
+inline void __LCD_DRIVER_WRITE_RESET_AFTER() {
+	// we dont need this since other processing will spend some time, so this is a great place to squeeze all the juices out of the MCU ;)
+	//__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+
+}
 
 #endif /* ATMEGA328P */
 #endif /* __LCD_DRIVER_ATMEGA328P_H */

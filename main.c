@@ -29,28 +29,35 @@ int main() {
 	float a=0;
 	while(1) {
 		frame++;
-		LCD_clearscreen();
+		LCD_clearscreen_fade();
 
-		for (uint8_t line = 0; line < 10;line++) {
-			uint8_t x1 = 16-line;
-			uint8_t y1 = 8 - line;
+		for (uint8_t line = 0; line < 8;line++) {
+			uint8_t x1 = 16-line-1;
+			uint8_t y1 = 8 - line-1;
 			uint8_t x2 = 16 + line;
 			uint8_t y2 = 8 + line;
-			uint8_t r = sin(1.4*a+line*0.4)*128.0+127;
-			uint8_t g = cos(1.7*a-line*0.4)*128.0+127;
-			uint8_t b = sin(0.83*a+line*0.4)*128.0+127;
+			uint8_t r = (2+line*line)*(sin(1.4*a+line*0.4)*128.0+127) / 64;
+			uint8_t g = (2+line*line)*(cos(1.7*a-line*0.4)*128.0+127) / 64;
+			uint8_t b = (2+line*line)*(sin(0.83*a+line*0.4)*128.0+127) / 64;
 
 			LCD_drawline(x1,y1,x2,y1,r,g,b);
 			LCD_drawline(x2,y2,x2,y1,r,g,b);
 			LCD_drawline(x2,y2,x1,y2,r,g,b);
 			LCD_drawline(x1,y2,x1,y1,r,g,b);
 
-
+			/*
 			LCD_drawline(x1+16,y1,x2+16,y1,r,g,b);
 			LCD_drawline(x2+16,y2,x2+16,y1,r,g,b);
 			LCD_drawline(x2+16,y2,x1+16,y2,r,g,b);
 			LCD_drawline(x1+16,y2,x1+16,y1,r,g,b);
+			*/
 		}
+
+		uint8_t x1 = cos(2*a)*16+16;
+		uint8_t y1 = sin(2*a)*8+8;
+		uint8_t x2 = 16;
+		uint8_t y2 = 8;
+		LCD_drawline(x1,y1,x2,y2,0,0,0);
 		
 		LCD_drawscreen();
 		x_offset++;
