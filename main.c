@@ -20,7 +20,7 @@ int main() {
 
 	LCD_init();
 
-	x_offset = -1;
+	x_offset = 0;
 	y_offset = 0;
 	z_offset = 0;
 
