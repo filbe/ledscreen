@@ -1,22 +1,23 @@
+/* Ledscreen driver library for microcontrollers
+ * Author: Ville-Pekka Lahti (C) 2019
+ * vp@wdr.fi
+ * +358504686300
+ * This project is tested with AtMega328P @ 20MHz
+ */
+
+
 #ifndef __LEDSCREEN_H_
 #define __LEDSCREEN_H_
 
-
-
-#define TR 							6
 #define SECOND_SCREEN_ON_BOTTOM 	0
 
 #define PANEL_W						32
 #define PANEL_H						8
 #define PANEL_LAYOUT_ZIGZAG 		1
-#define SECOND_PANEL_ON_BOTTOM		1
+#define SECOND_PANEL_ON_BOTTOM		0
 #define SCREEN_W					PANEL_W
 #define SCREEN_H					(PANEL_H * (1 + SECOND_PANEL_ON_BOTTOM))
 #define SCREEN_SIZE 				(SCREEN_W * SCREEN_H)
-
-uint8_t x_offset;
-uint8_t y_offset;
-int z_offset;
 
 
 int8_t screen[SCREEN_SIZE][3];
