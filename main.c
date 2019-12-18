@@ -135,8 +135,12 @@ int main() {
 		// nyt kirjoitettavaa pikseliä. Siksi "valmistelemme" ensin näyttöön piirrettävän kuvan
 		// mikrokontrollerin muistiin ja vasta sitten kun kaikki on valmista, lähetämme tiedon eteenpäin.
 		LCD_drawscreen();
-		x_offset--;
-		//y_offset++;
+
+		// x_offset ja y_offset -muuttujat lisäävät x- tai y-koordinaatteihin kiinteän luvun. Kun näitä arvoja
+		// muutetaan jokaisella kierroksella, se saa LED-paneelille piirretyn kuvan liikkumaan vaaka- tai pystysuunnassa.
+		// Kokeile poistaa kommentti y_offset -rivin alusta. Miten toiminta muuttui?
+		x_offset = x_offset - 1;
+		//y_offset = y_offset + 1;
 	}
 	return 0;
 }
