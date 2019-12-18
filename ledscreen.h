@@ -14,8 +14,8 @@
 #define SCREEN_H					(PANEL_H * (1 + SECOND_PANEL_ON_BOTTOM))
 #define SCREEN_SIZE 				(SCREEN_W * SCREEN_H)
 
-int x_offset;
-int y_offset;
+uint8_t x_offset;
+uint8_t y_offset;
 int z_offset;
 
 
