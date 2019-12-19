@@ -10,6 +10,7 @@
 #include <math.h>
 #include <string.h>
 #include <stdint.h>
+#include <util/delay.h>
 
 #include "ledscreen.h"
 
@@ -42,12 +43,6 @@ Käytännössä ohjelmaa aletaan suorittaa alusta heti, kun laitteeseen kytketä
 // ****************
 
 
-// määritellään pari tärkeää muuttujaa
-uint8_t x_offset;
-uint8_t y_offset;
-int z_offset;
-
-
 int main() {
 
 	// tehdään muutama tärkeä asetus
@@ -61,6 +56,7 @@ int main() {
 
 	// Koska halutaan, että ohjelmaa suoritetaan jatkuvasti eikä se ikinä pysähdy, tehdään "ikuinen silmukka".
 	// Kaikkia while(1) { ja sitä vastaavan } välissä oleva suoritetaan ikuisesti
+
 
 	while(1) {
 		// tyhjennetään näyttöpuskuri, jotta aloitetaan joka kierroksella aina "puhtaalta pöydältä"
@@ -141,6 +137,7 @@ int main() {
 		// Kokeile poistaa kommentti y_offset -rivin alusta. Miten toiminta muuttui?
 		x_offset = x_offset - 1;
 		//y_offset = y_offset + 1;
+		_delay_ms(100);
 	}
 	return 0;
 }

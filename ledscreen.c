@@ -151,7 +151,7 @@ inline void _LCD_send_component(uint8_t val) {
 	// väri on punaiseen taittuva. Se on merkki liian vähäisestä sähkönsaannista.
 	// Kokeile myös muuttaa lukua (alkuperäinen on 8)
 
-	val = val / 8;
+	val = val / 24;
 
 	// tässä on for-loop (silmukka), jossa muutetaan val-muuttujaan tallennettu luku
 	// nolliksi ja ykkösiksi ja kirjoitetaan ne LCD-paneelille ajurifunktioiden avulla
@@ -253,7 +253,11 @@ void LCD_drawscreen() {
 // tyhjennetään virtuaalinen näyttö. Tämä ei yksin sammuta LCD-paneelin pikseleitä, vaan tämän
 // jälkeen pitää vielä kutsua LCD_drawscreen -funktiota
 void LCD_clearscreen() {
-	memset(&screen, 0, SCREEN_SIZE);
+	for (int i=0;i<SCREEN_SIZE;i++) {
+		screen[i][0] = 0;
+		screen[i][1] = 0;
+		screen[i][2] = 0;
+	}
 }
 
 // Tämä pimentää virtuaalisen näytön pikseleitä vähitellen. Voi käyttää hienojen fade-efektien tekoon,

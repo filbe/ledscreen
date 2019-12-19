@@ -20,7 +20,7 @@ inline void __LCD_DRIVER_WRITE_ZERO_SIG_UP() {
 }
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_UP_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_ZERO_SIG_DOWN() {
@@ -37,7 +37,7 @@ inline void __LCD_DRIVER_WRITE_ONE_SIG_UP() {
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_UP_AFTER() {
-	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
+	__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");__asm("nop");
 }
 
 inline void __LCD_DRIVER_WRITE_ONE_SIG_DOWN() {
